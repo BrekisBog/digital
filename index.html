@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>ИП Петров — Digital-агентство | Сайты, дизайн, продвижение</title>
+    <meta name="description" content="Digital-агентство ИП Петров. Разработка сайтов, UI/UX дизайн, SEO-продвижение. 120+ реализованных проектов.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header" class="site-header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo-link" id="logo-home">
+                    <div class="logo-badge"><span class="logo-letter">П</span></div>
+                    <div class="logo-text-wrapper">
+                        <div class="logo-title">ИП Петров</div>
+                        <div class="logo-subtitle">Digital-агентство</div>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <span class="nav-link" data-nav="services">Услуги</span>
+                    <span class="nav-link" data-nav="process">Процесс</span>
+                    <span class="nav-link" data-nav="portfolio">Портфолио</span>
+                    <span class="nav-link" data-nav="pricing">Цены</span>
+                    <span class="nav-link" data-nav="trust">Отзывы</span>
+                    <span class="nav-link" data-nav="contact">Контакты</span>
+                </nav>
+                <div class="header-contacts">
+                    <a href="tel:+79001234567" class="header-phone"><i class="fas fa-phone-alt"></i> +7 (900) 123-45-67</a>
+                    <a href="#contact" class="btn btn-primary btn-sm" id="contact-btn">Обсудить проект</a>
+                </div>
+                <button id="mobile-menu-button" class="mobile-menu-btn" aria-label="Открыть меню"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="mobile-menu">
+            <div class="mobile-menu-inner">
+                <span class="mobile-nav-link" data-nav="services">Услуги</span>
+                <span class="mobile-nav-link" data-nav="process">Процесс</span>
+                <span class="mobile-nav-link" data-nav="portfolio">Портфолио</span>
+                <span class="mobile-nav-link" data-nav="pricing">Цены</span>
+                <span class="mobile-nav-link" data-nav="trust">Отзывы</span>
+                <span class="mobile-nav-link" data-nav="contact">Контакты</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div id="main-content" class="main-content">
+            <section id="hero" class="hero-section">
+                <div class="hero-bg-overlay"></div>
+                <div class="hero-gradient-overlay"></div>
+                <div class="hero-decoration hero-decoration-1"></div>
+                <div class="hero-decoration hero-decoration-2"></div>
+                <div class="container hero-container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Сайты и цифровые решения, <span class="hero-title-highlight">которые работают на вас</span></h1>
+                        <p class="hero-description">Разрабатываем лендинги, корпоративные сайты и интернет-магазины. Привлекаем клиентов и увеличиваем продажи.</p>
+                        <div class="hero-buttons">
+                            <a href="#contact" class="btn btn-primary btn-lg">Обсудить проект</a>
+                            <a href="#portfolio" class="btn btn-outline btn-lg">Смотреть портфолио</a>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="stat-item"><div class="stat-value">120+</div><div class="stat-label">проектов сдано</div></div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item"><div class="stat-value">5 лет</div><div class="stat-label">на рынке</div></div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item"><div class="stat-value">98%</div><div class="stat-label">довольных клиентов</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="services" class="services-section">
+                <div class="container">
+                    <div class="section-header anim-item">
+                        <span class="section-label">Что мы делаем</span>
+                        <h2 class="section-title">Наши услуги</h2>
+                        <p class="section-description">Полный цикл разработки цифровых продуктов — от идеи до запуска и поддержки</p>
+                    </div>
+                    <div class="services-grid anim-grid" id="services-grid"></div>
+                </div>
+            </section>
+
+            <section id="process" class="process-section">
+                <div class="container">
+                    <div class="section-header anim-item">
+                        <span class="section-label section-label-dark">Как мы работаем</span>
+                        <h2 class="section-title section-title-white">Процесс работы</h2>
+                        <p class="section-description section-description-dark">Прозрачный процесс без лишних согласований — вы всегда знаете, что происходит</p>
+                    </div>
+                    <div class="process-grid anim-grid" id="process-grid"></div>
+                </div>
+            </section>
+
+            <section id="portfolio" class="portfolio-section">
+                <div class="container">
+                    <div class="section-header anim-item">
+                        <span class="section-label">Наши работы</span>
+                        <h2 class="section-title">Портфолио</h2>
+                        <p class="section-description">Реальные проекты — реальные результаты для бизнеса</p>
+                    </div>
+                    <div id="portfolio-grid" class="portfolio-grid anim-grid"></div>
+                </div>
+            </section>
+
+            <section id="pricing" class="pricing-section">
+                <div class="container">
+                    <div class="section-header anim-item">
+                        <span class="section-label">Стоимость</span>
+                        <h2 class="section-title">Услуги.</h2>
+                        <p class="section-description">Выбор бизнеса</p>
+                    </div>
+
+                    <div class="pricing-tabs anim-item">
+                        <button class="pricing-tab active" data-tab="dev">Разработка</button>
+                        <button class="pricing-tab" data-tab="marketing">Маркетинг</button>
+                    </div>
+
+                    <div class="pricing-carousel-container active" id="carousel-dev">
+                        <div class="carousel-wrapper">
+                            <button class="carousel-btn carousel-prev" data-carousel="dev">❮</button>
+                            <div class="carousel-track-container">
+                                <div class="carousel-track" id="carousel-track-dev"></div>
+                            </div>
+                            <button class="carousel-btn carousel-next" data-carousel="dev">❯</button>
+                        </div>
+                        <div class="carousel-dots" id="carousel-dots-dev"></div>
+                    </div>
+
+                    <div class="pricing-carousel-container" id="carousel-marketing">
+                        <div class="carousel-wrapper">
+                            <button class="carousel-btn carousel-prev" data-carousel="marketing">❮</button>
+                            <div class="carousel-track-container">
+                                <div class="carousel-track" id="carousel-track-marketing"></div>
+                            </div>
+                            <button class="carousel-btn carousel-next" data-carousel="marketing">❯</button>
+                        </div>
+                        <div class="carousel-dots" id="carousel-dots-marketing"></div>
+                    </div>
+
+                    <p class="pricing-note">Нужно нестандартное решение? <a href="#contact" class="pricing-link">Свяжитесь с нами</a> — рассчитаем индивидуально.</p>
+                </div>
+            </section>
+
+            <section id="trust" class="trust-section">
+                <div class="container">
+                    <div class="section-header anim-item">
+                        <span class="section-label">Почему выбирают нас</span>
+                        <h2 class="section-title">Гарантии и преимущества</h2>
+                    </div>
+                    <div class="advantages-grid anim-grid" id="advantages-grid"></div>
+                    <div class="reviews-slider-section">
+                        <div class="section-header anim-item" style="margin-bottom: 1.5rem;">
+                            <span class="section-label">Отзывы</span>
+                            <h3 class="section-title" style="margin-top:0.5rem;">Что говорят наши клиенты</h3>
+                        </div>
+                        <div class="reviews-slider">
+                            <button class="slider-btn slider-prev" id="prevBtn" aria-label="Предыдущий отзыв"><i class="fas fa-chevron-left"></i></button>
+                            <div class="slider-container">
+                                <div class="slider-track" id="sliderTrack"></div>
+                            </div>
+                            <button class="slider-btn slider-next" id="nextBtn" aria-label="Следующий отзыв"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="slider-dots" id="sliderDots"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="contact-section">
+                <div class="container">
+                    <div class="section-header anim-item">
+                        <span class="section-label section-label-dark">Связаться</span>
+                        <h2 class="section-title section-title-white">Обсудим ваш проект</h2>
+                        <p class="section-description section-description-dark">Расскажите о задаче — мы подготовим предложение в течение 24 часов</p>
+                    </div>
+                    <div class="contact-grid">
+                        <div id="contact-info" class="anim-item" style="transition-delay: 0.1s;"></div>
+                        <div id="contact-form-container" class="contact-form-wrapper anim-item" style="transition-delay: 0.2s;"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="case-study" class="case-study-section">
+            <div class="back-to-portfolio" id="back-to-portfolio"><i class="fas fa-arrow-left"></i> Портфолио</div>
+            
+            <div class="case-hero" id="case-hero">
+                <img id="case-hero-img" class="case-hero-image" src="photo/zaglushka.jpg" alt="">
+                <div class="case-hero-overlay"></div>
+                <div class="case-hero-content">
+                    <span class="case-hero-category" id="case-category">Лендинг</span>
+                    <h1 class="case-hero-title" id="case-title">Юридическая компания «Правозащита»</h1>
+                    <div class="case-hero-meta">
+                        <div><span>Год:</span> <span id="case-year">2024</span></div>
+                        <div><span>Срок:</span> <span id="case-duration">2 недели</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="case-main">
+                <div class="case-layout">
+                    <div class="case-left">
+                        <p class="case-description-text" id="case-description"></p>
+                        <div class="case-info-cards" id="case-cards"></div>
+                        <div class="case-screenshots-section">
+                            <h3 class="case-screenshots-title">Скриншоты проекта</h3>
+                            <div class="case-screenshots-grid" id="case-screenshots"></div>
+                        </div>
+                    </div>
+                    <div class="case-sidebar">
+                        <div class="case-sidebar-card">
+                            <h3 class="case-tech-title">Технологии и услуги</h3>
+                            <div class="case-tags" id="case-tags"></div>
+                        </div>
+                        <div class="case-cta-card">
+                            <h3 class="case-cta-title">Нужен похожий проект?</h3>
+                            <p class="case-cta-text">Расскажите о своей задаче — обсудим и сделаем предложение.</p>
+                            <a href="#contact" class="case-cta-button" id="case-cta-link">Обсудить проект</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="case-navigation">
+                <div class="case-nav-inner" id="case-navigation"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-rights">© <span id="current-year"></span> ИП Петров. Все права защищены.</div>
+                <a href="#" class="footer-privacy-link" id="open-privacy">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="privacy-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="close-privacy" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+            <h3 class="modal-title">Политика конфиденциальности</h3>
+            <div class="modal-body">
+                <p>Настоящая Политика конфиденциальности регулирует порядок обработки и использования персональных данных пользователей сайта ИП Петров.</p>
+                <h4>1. Сбор информации</h4>
+                <p>Мы собираем только ту информацию, которую вы предоставляете добровольно через формы обратной связи, а также данные, необходимые для улучшения работы сайта (cookies, IP-адрес, тип устройства).</p>
+                <h4>2. Использование данных</h4>
+                <p>Собранные данные используются исключительно для связи с вами по оставленной заявке, улучшения качества услуг и отправки релевантных материалов по вашему запросу. Мы не передаём ваши данные третьим лицам без вашего согласия, за исключением случаев, предусмотренных законодательством РФ.</p>
+                <h4>3. Защита информации</h4>
+                <p>Мы применяем современные организационные и технические меры для защиты ваших данных от несанкционированного доступа, изменения, раскрытия или уничтожения.</p>
+                <h4>4. Cookies</h4>
+                <p>Сайт может использовать файлы cookie для сохранения ваших предпочтений и анализа трафика. Вы можете отключить cookies в настройках браузера, однако это может повлиять на функциональность сайта.</p>
+                <h4>5. Согласие</h4>
+                <p>Отправляя форму на сайте, вы автоматически соглашаетесь с условиями данной политики. Если вы не согласны, пожалуйста, воздержитесь от отправки персональных данных.</p>
+                <p style="margin-top: 1rem; font-size: 0.8rem; color: #94a3b8;">Дата последнего обновления: 01.11.2024</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" id="lightbox-close" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Предыдущее"><i class="fas fa-chevron-left"></i></button>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Следующее"><i class="fas fa-chevron-right"></i></button>
+        <div class="lightbox-counter" id="lightbox-counter">1 / 3</div>
+        <div class="lightbox-img-wrapper">
+            <img id="lightbox-img" class="lightbox-img" src="" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script src="js/data/services.js"></script>
+    <script src="js/data/process.js"></script>
+    <script src="js/data/pricing.js"></script>
+    <script src="js/data/advantages.js"></script>
+    <script src="js/data/reviews.js"></script>
+    <script src="js/data/contacts.js"></script>
+    <script src="js/data/projects.js"></script>
+    
+    <script src="js/utils/helpers.js"></script>
+    
+    <script src="js/modules/lightbox.js"></script>
+    <script src="js/modules/slider.js"></script>
+    <script src="js/modules/modal.js"></script>
+    <script src="js/modules/form.js"></script>
+    <script src="js/modules/portfolio.js"></script>
+    <script src="js/modules/navigation.js"></script>
+    <script src="js/modules/animations.js"></script>
+    <script src="js/modules/render.js"></script>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>
