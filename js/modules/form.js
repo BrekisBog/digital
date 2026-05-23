@@ -9,7 +9,7 @@ function clearFormErrors(form) {
 function showError(input, message) {
     input.classList.add('form-input-error');
     const errSlot = input.nextElementSibling;
-    if (errSlot) {
+    if (errSlot && errSlot.classList.contains('error-slot')) {
         errSlot.textContent = message;
         errSlot.classList.add('active');
     }
@@ -87,7 +87,7 @@ function initContactForm() {
         input.addEventListener('input', () => {
             input.classList.remove('form-input-error');
             const err = input.nextElementSibling;
-            if (err) {
+            if (err && err.classList.contains('error-slot')) {
                 err.textContent = '';
                 err.classList.remove('active');
             }
@@ -101,16 +101,49 @@ function initContactForm() {
         if (!validateContactForm(form)) return;
 
         const btn = form.querySelector('.contact-form-submit');
+        const originalText = btn.textContent;
         btn.disabled = true;
+        btn.textContent = 'Отправка...';
         btn.classList.add('loading');
 
-        await new Promise(res => setTimeout(res, 1200));
+        const name = form.querySelector('[name="name"]').value;
+        const contact = form.querySelector('[name="contact"]').value;
+        const message = form.querySelector('[name="message"]').value;
 
-        container.innerHTML = `
-            <div style="text-align:center; padding:2.5rem 1rem; color:white; animation: fadeIn 0.5s ease;">
-                <i class="fas fa-check-circle" style="font-size:2.5rem; color:#0ea5e9; margin-bottom:1rem; display:block;"></i>
-                <h3 style="margin-bottom:0.5rem; font-size:1.25rem;">Заявка успешно отправлена!</h3>
-                <p style="color: var(--color-gray-400); line-height: 1.5;">Мы свяжемся с вами в течение 2 часов в рабочее время.</p>
-            </div>`;
+        try {
+            const response = await fetch('http://localhost:3000/api/client/request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name.trim(),
+                    contact: contact.trim(),
+                    message: message.trim() || ''
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:2.5rem 1rem; color:white; animation: fadeIn 0.5s ease;">
+                        <i class="fas fa-check-circle" style="font-size:2.5rem; color:#0ea5e9; margin-bottom:1rem; display:block;"></i>
+                        <h3 style="margin-bottom:0.5rem; font-size:1.25rem;">Заявка успешно отправлена!</h3>
+                        <p style="color: var(--color-gray-400); line-height: 1.5;">Мы свяжемся с вами в ближайшее время.</p>
+                    </div>`;
+            } else {
+                throw new Error(data.error || 'Ошибка отправки');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            btn.disabled = false;
+            btn.textContent = originalText;
+            btn.classList.remove('loading');
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = 'text-align:center; padding:1rem; color:#ef4444; margin-top:1rem; background: rgba(239,68,68,0.1); border-radius:12px;';
+            errorDiv.textContent = 'Ошибка отправки. Попробуйте позже или позвоните нам.';
+            form.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
     });
 }
