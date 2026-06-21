@@ -5,14 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPricing();
     renderAdvantages();
     renderContactInfo();
+    renderPortfolio();
     
-    // 2. Инициализируем интерактивные модули
+    // 2. Принудительно закрываем детальный просмотр портфолио
+    if (typeof closeProjectDetail === 'function') {
+        closeProjectDetail();
+    }
+    
+    // 3. Инициализируем интерактивные модули
     initPortfolio();
-    initPricingTabs();      // Переключение вкладок + карусель цен
-    initReviewsSlider();    // Слайдер отзывов
-    initContactForm();      // Валидация и отправка формы
-    initNavigation();       // Хедер, мобильное меню, якоря
-    initLightbox();         // Увеличение скриншотов
-    initPrivacyModal();     // Модальное окно политики
-    initScrollAnimations(); // Появление элементов при скролле
+    initPricingTabs();
+    initReviewsSlider();
+    initContactForm();
+    initNavigation();
+    initLightbox();
+    initPrivacyModal();
+    initScrollAnimations();
 });

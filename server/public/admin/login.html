@@ -2,104 +2,109 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в админ-панель</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            background: linear-gradient(135deg, #0d1b3e 0%, #0a1429 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-container {
-            background: white;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 400px;
-            margin: 20px;
-        }
-        h1 { font-size: 24px; margin-bottom: 8px; color: #0d1b3e; }
-        .subtitle { color: #6b7280; margin-bottom: 32px; font-size: 14px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: #374151; }
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-        input:focus {
-            outline: none;
-            border-color: #0ea5e9;
-            box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #0ea5e9;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        button:hover { background: #0284c7; }
-        .error {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-        }
-        .demo-hint {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 12px;
-            color: #9ca3af;
-            text-align: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Вход в админ-панель | ИП Петров</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/login.css">
 </head>
 <body>
     <div class="login-container">
-        <h1>🔐 Вход в админ-панель</h1>
-        <p class="subtitle">Управление чатом с клиентами</p>
+        <div class="logo">
+            <div class="logo-badge">
+                <span class="logo-letter">П</span>
+            </div>
+            <div class="logo-title">ИП Петров</div>
+            <div class="logo-subtitle">Digital-агентство</div>
+        </div>
         
-        <div id="error" class="error"></div>
+        <div class="login-header">
+            <h1>Вход в админ-панель</h1>
+            <p>Управление чатами и заявками</p>
+        </div>
+        
+        <div id="errorMessage" class="error-message" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="errorText"></span>
+        </div>
         
         <form id="loginForm">
             <div class="form-group">
                 <label>Логин</label>
-                <input type="text" id="username" placeholder="admin" required>
+                <div class="input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" placeholder="admin" autocomplete="off" enterkeyhint="next">
+                </div>
             </div>
             <div class="form-group">
                 <label>Пароль</label>
-                <input type="password" id="password" placeholder="••••••" required>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="••••••" enterkeyhint="done">
+                </div>
             </div>
-            <button type="submit">Войти</button>
+            <button type="submit" class="btn-login" id="loginBtn">
+                <span id="btnText">Войти в систему</span>
+            </button>
         </form>
+        
         <div class="demo-hint">
-            🔑 Логин: admin | Пароль: 123456
+            <p>Тестовые данные для входа</p>
+            <div class="demo-credentials">
+                <span>Логин: admin</span>
+                <span>Пароль: 123456</span>
+            </div>
+            <p style="margin-top: 12px; font-size: 11px; color: #cbd5e1;">
+                Для менеджеров: manager1 / 123456
+            </p>
         </div>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const btnText = document.getElementById('btnText');
+        const errorMessageDiv = document.getElementById('errorMessage');
+        const errorTextSpan = document.getElementById('errorText');
+        
+        function showError(message) {
+            errorTextSpan.textContent = message;
+            errorMessageDiv.style.display = 'flex';
+            usernameInput.classList.add('error');
+            passwordInput.classList.add('error');
+            setTimeout(() => {
+                errorMessageDiv.style.display = 'none';
+                usernameInput.classList.remove('error');
+                passwordInput.classList.remove('error');
+            }, 4000);
+        }
+        
+        function setLoading(isLoading) {
+            if (isLoading) {
+                loginBtn.disabled = true;
+                btnText.innerHTML = '<span class="spinner"></span> Вход...';
+            } else {
+                loginBtn.disabled = false;
+                btnText.textContent = 'Войти в систему';
+            }
+        }
+        
+        async function handleLogin(e) {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('error');
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!username || !password) {
+                showError('Пожалуйста, введите логин и пароль');
+                return;
+            }
+            
+            setLoading(true);
             
             try {
                 const response = await fetch('/api/auth/login', {
@@ -113,14 +118,28 @@
                 if (data.success) {
                     window.location.href = '/admin/index.html';
                 } else {
-                    errorDiv.textContent = data.error;
-                    errorDiv.style.display = 'block';
+                    showError(data.error || 'Неверный логин или пароль');
                 }
             } catch (error) {
-                errorDiv.textContent = 'Ошибка соединения с сервером';
-                errorDiv.style.display = 'block';
+                console.error('Ошибка входа:', error);
+                showError('Ошибка соединения с сервером. Проверьте, запущен ли сервер.');
+            } finally {
+                setLoading(false);
             }
+        }
+        
+        loginForm.addEventListener('submit', handleLogin);
+        
+        usernameInput.addEventListener('input', () => {
+            errorMessageDiv.style.display = 'none';
+            usernameInput.classList.remove('error');
         });
+        passwordInput.addEventListener('input', () => {
+            errorMessageDiv.style.display = 'none';
+            passwordInput.classList.remove('error');
+        });
+        
+        usernameInput.focus();
     </script>
 </body>
 </html>

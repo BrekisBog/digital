@@ -7,7 +7,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const clientRoutes = require('./routes/client');
-const requestsRoutes = require('./routes/requests');  // ← ДОБАВИТЬ
+const requestsRoutes = require('./routes/requests');
 const pool = require('./db');
 
 const app = express();
@@ -19,8 +19,8 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../style')));
 
-// Сессии
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -35,10 +35,9 @@ app.use(session({
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/client', clientRoutes);
-app.use('/api/requests', requestsRoutes);  
+app.use('/api/requests', requestsRoutes);
 
 app.use('/admin', express.static(path.join(__dirname, 'public/admin')));
-
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);

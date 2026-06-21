@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Управление менеджерами | Админ-панель</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <link rel="stylesheet" href="/manager.css">
+</head>
+<body>
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Управление менеджерами</h2>
+            <p>Создание и управление учётными записями</p>
+            <div class="nav-links" id="navLinks">
+                <a href="/admin/index.html">Чаты</a>
+                <a href="/admin/requests.html">Заявки</a>
+                <a href="/admin/managers.html" class="active" id="managersLink">Менеджеры</a>
+            </div>
+        </div>
+        
+        <div class="user-info" id="userInfo">
+            <div class="user-avatar" id="userAvatar">A</div>
+            <div class="user-details">
+                <div class="user-name" id="userName">Загрузка...</div>
+                <div class="user-role" id="userRole"></div>
+            </div>
+            <div class="user-badge" id="userBadge">...</div>
+        </div>
+        
+        <div class="sessions-list" id="requestsList"></div>
+    </div>
+    
+    <div class="content-area">
+        <div class="content-header">
+            <div class="content-header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Открыть меню">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12h18M3 6h18M3 18h18"/>
+                    </svg>
+                </button>
+                <h3 id="currentTitle">Управление менеджерами</h3>
+            </div>
+            <button class="logout-btn" id="logoutBtn">Выйти</button>
+        </div>
+        
+        <div class="requests-container" id="requestsContainer">
+            <div class="page-header">
+                <div>
+                    <h2>Список менеджеров</h2>
+                    <p class="subtitle" id="subtitleText">Все учётные записи менеджеров в системе</p>
+                </div>
+                <button class="btn-primary" id="createManagerBtn">
+                    <i class="fas fa-user-plus"></i> Добавить менеджера
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Логин</th>
+                            <th>Активных чатов</th>
+                            <th>Активных заявок</th>
+                            <th>Дата создания</th>
+                            <th style="text-align: center;">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="managersTableBody">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px;">
+                                    <div class="spinner"></div>
+                                    <span style="color: #94a3b8;">Загрузка...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ СОЗДАНИЯ МЕНЕДЖЕРА -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Добавить менеджера</h3>
+                <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="createManagerForm">
+                <div class="form-group">
+                    <label for="managerUsername">Логин <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="managerUsername" placeholder="Введите логин" autocomplete="off">
+                    <div class="form-error" id="usernameError">Минимум 3 символа</div>
+                </div>
+                <div class="form-group">
+                    <label for="managerPassword">Пароль <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="managerPassword" placeholder="Введите пароль" autocomplete="off">
+                    <div class="form-error" id="passwordError">Минимум 4 символа</div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelModalBtn">Отмена</button>
+                    <button type="submit" class="btn-primary" id="submitManagerBtn">
+                        <i class="fas fa-plus"></i> Создать
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПЕРЕНАЗНАЧЕНИЯ С ВЫБОРОМ -->
+    <div class="modal-overlay" id="reassignModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Переназначить чаты и заявки</h3>
+                <button class="modal-close" id="closeReassignModalBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="reassignInfo">
+                <p style="margin-bottom: 12px; color: #475569; font-size: 15px; line-height: 1.5;">
+                    Переназначение для <strong id="reassignManagerName">...</strong>
+                </p>
+                <div style="background: #f0f9ff; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; border-left: 3px solid #0ea5e9;">
+                    <p style="font-size: 13px; color: #0d1b3e;">
+                        <i class="fas fa-info-circle" style="color: #0ea5e9;"></i>
+                        Выберите менеджера и отметьте конкретные чаты/заявки для переноса.
+                    </p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="targetManagerSelect">Выберите менеджера <span style="color: #ef4444;">*</span></label>
+                    <select id="targetManagerSelect">
+                        <option value="">-- Выберите менеджера --</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: 500; font-size: 14px; color: #334155; margin-bottom: 8px;">Выберите чаты для переноса:</label>
+                    <div class="checkbox-list" id="sessionsCheckboxList">
+                        <div class="select-all-row">
+                            <input type="checkbox" id="selectAllSessions" checked>
+                            <label for="selectAllSessions">Выбрать все чаты</label>
+                            <span style="font-size: 12px; color: #94a3b8; margin-left: auto;" id="sessionsCountLabel">(0)</span>
+                        </div>
+                        <div id="sessionsCheckboxes"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: 500; font-size: 14px; color: #334155; margin-bottom: 8px;">Выберите заявки для переноса:</label>
+                    <div class="checkbox-list" id="requestsCheckboxList">
+                        <div class="select-all-row">
+                            <input type="checkbox" id="selectAllRequests" checked>
+                            <label for="selectAllRequests">Выбрать все заявки</label>
+                            <span style="font-size: 12px; color: #94a3b8; margin-left: auto;" id="requestsCountLabel">(0)</span>
+                        </div>
+                        <div id="requestsCheckboxes"></div>
+                    </div>
+                </div>
+                
+                <div style="background: #fef3c7; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px;">
+                    <p style="font-size: 13px; color: #92400e;">
+                        <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                        Отмеченные чаты и заявки будут переданы выбранному менеджеру.
+                    </p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="cancelReassignBtn">Отмена</button>
+                <button type="button" class="btn-primary" id="confirmReassignBtn">
+                    <i class="fas fa-exchange-alt"></i> Переназначить выбранное
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Удалить менеджера</h3>
+                <button class="modal-close" id="closeDeleteModalBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="deleteInfo">
+                <p style="margin-bottom: 12px; color: #475569; font-size: 15px; line-height: 1.5;">
+                    Вы действительно хотите удалить менеджера <strong id="deleteManagerName">...</strong>?
+                </p>
+                <div style="background: #f0f9ff; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; border-left: 3px solid #0ea5e9;">
+                    <p style="font-size: 13px; color: #0d1b3e;">
+                        <i class="fas fa-info-circle" style="color: #0ea5e9;"></i>
+                        Все чаты и заявки этого менеджера будут автоматически переназначены другому менеджеру.
+                    </p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="cancelDeleteBtn">Отмена</button>
+                <button type="button" class="btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Удалить
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toastContainer"></div>
+    
+    <script>
+        let currentUser = null;
+        let managers = [];
+        let deleteTargetId = null;
+        let reassignTargetId = null;
+        let reassignTargetName = '';
+        let sessionsData = [];
+        let requestsData = [];
+        let isLoading = true;
+        
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+        }
+        
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 5000);
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+        
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/check');
+                const data = await response.json();
+                if (!data.authenticated) {
+                    window.location.href = '/admin/login.html';
+                    return;
+                }
+                currentUser = data.admin;
+                
+                if (currentUser.role !== 'admin') {
+                    window.location.href = '/admin/index.html';
+                    return;
+                }
+                
+                const managersLink = document.getElementById('managersLink');
+                if (managersLink) {
+                    managersLink.style.display = currentUser.role === 'admin' ? '' : 'none';
+                }
+                
+                updateUserInterface();
+                await loadManagers();
+            } catch (error) {
+                window.location.href = '/admin/login.html';
+            }
+        }
+        
+        function updateUserInterface() {
+            if (!currentUser) return;
+            const isAdmin = currentUser.role === 'admin';
+            const avatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userRole = document.getElementById('userRole');
+            const userBadge = document.getElementById('userBadge');
+            
+            avatar.textContent = currentUser.username.charAt(0).toUpperCase();
+            avatar.className = `user-avatar ${isAdmin ? 'admin' : 'manager'}`;
+            userName.textContent = currentUser.username;
+            userRole.textContent = isAdmin ? 'Администратор - управление менеджерами' : 'Менеджер';
+            userBadge.textContent = isAdmin ? 'Админ' : 'Менеджер';
+            userBadge.className = `user-badge ${isAdmin ? 'admin' : 'manager'}`;
+        }
+        
+        async function loadManagers() {
+            isLoading = true;
+            document.getElementById('managersTableBody').innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px;">
+                            <div class="spinner"></div>
+                            <span style="color: #94a3b8;">Загрузка...</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            
+            try {
+                const response = await fetch('/api/admin/managers');
+                const data = await response.json();
+                managers = data;
+                isLoading = false;
+                renderManagersTable();
+                
+                const count = managers.length;
+                document.getElementById('subtitleText').textContent = 
+                    count > 0 ? `${count} менеджер${count === 1 ? '' : count < 5 ? 'а' : 'ов'} в системе` : 'Менеджеры не найдены';
+            } catch (error) {
+                console.error('Ошибка загрузки менеджеров:', error);
+                isLoading = false;
+                document.getElementById('managersTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>
+                            <p>Ошибка загрузки данных</p>
+                            <p style="font-size: 13px; color: #94a3b8;">Попробуйте обновить страницу</p>
+                        </td>
+                    </tr>
+                `;
+                showToast('Ошибка загрузки списка менеджеров', 'error');
+            }
+        }
+        
+        function renderManagersTable() {
+            const tbody = document.getElementById('managersTableBody');
+            
+            if (!managers || managers.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-users" style="font-size: 36px; display: block; margin-bottom: 12px;"></i>
+                            <p>Менеджеры не найдены</p>
+                            <p style="font-size: 13px; color: #94a3b8;">Нажмите «Добавить менеджера», чтобы создать первого</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = managers.map(m => `
+                <tr>
+                    <td>${m.id}</td>
+                    <td><strong>${escapeHtml(m.username)}</strong></td>
+                    <td>${m.current_chats || 0}</td>
+                    <td>${m.requests_count || 0}</td>
+                    <td>${new Date(m.created_at).toLocaleDateString('ru-RU')}</td>
+                    <td style="text-align: center; display: flex; gap: 4px; justify-content: center;">
+                        <button class="btn-success" onclick="showReassignModal(${m.id}, '${escapeHtml(m.username)}')" title="Переназначить чаты и заявки">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        <button class="btn-danger" onclick="confirmDelete(${m.id}, '${escapeHtml(m.username)}')" title="Удалить менеджера">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // ============================================================
+        // ПЕРЕНАЗНАЧЕНИЕ С ВЫБОРОМ
+        // ============================================================
+        
+        async function showReassignModal(id, username) {
+            reassignTargetId = id;
+            reassignTargetName = username;
+            document.getElementById('reassignManagerName').textContent = username;
+            
+            // Заполняем список менеджеров
+            const select = document.getElementById('targetManagerSelect');
+            select.innerHTML = '<option value="">-- Выберите менеджера --</option>';
+            
+            managers.forEach(m => {
+                if (m.id !== id) {
+                    const option = document.createElement('option');
+                    option.value = m.id;
+                    option.textContent = `${m.username} (чатов: ${m.current_chats || 0})`;
+                    select.appendChild(option);
+                }
+            });
+            
+            // Загружаем чаты и заявки менеджера
+            try {
+                // Чаты
+                const sessionsRes = await fetch(`/api/admin/managers/${id}/sessions`);
+                sessionsData = await sessionsRes.json();
+                
+                // Заявки
+                const requestsRes = await fetch(`/api/admin/managers/${id}/requests`);
+                requestsData = await requestsRes.json();
+            } catch (e) {
+                console.error('Ошибка загрузки данных:', e);
+                sessionsData = [];
+                requestsData = [];
+            }
+            
+            // Рендерим чекбоксы
+            renderCheckboxes();
+            
+            // Сбрасываем "выбрать всё"
+            document.getElementById('selectAllSessions').checked = true;
+            document.getElementById('selectAllRequests').checked = true;
+            
+            document.getElementById('reassignModal').classList.add('active');
+        }
+        
+        function renderCheckboxes() {
+            // Чаты
+            const sessionsContainer = document.getElementById('sessionsCheckboxes');
+            document.getElementById('sessionsCountLabel').textContent = `(${sessionsData.length})`;
+            
+            if (sessionsData.length === 0) {
+                sessionsContainer.innerHTML = '<div style="color: #94a3b8; font-size: 13px; padding: 8px 0;">Нет чатов</div>';
+            } else {
+                sessionsContainer.innerHTML = sessionsData.map(s => `
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="session-checkbox" value="${escapeHtml(s.session_id)}" checked>
+                        <span>${escapeHtml(s.session_id.substring(0, 30))}...</span>
+                        <span class="item-status ${s.status === 'active' ? 'active' : 'waiting'}">${s.status || 'active'}</span>
+                    </label>
+                `).join('');
+            }
+            
+            // Заявки
+            const requestsContainer = document.getElementById('requestsCheckboxes');
+            document.getElementById('requestsCountLabel').textContent = `(${requestsData.length})`;
+            
+            if (requestsData.length === 0) {
+                requestsContainer.innerHTML = '<div style="color: #94a3b8; font-size: 13px; padding: 8px 0;">Нет заявок</div>';
+            } else {
+                requestsContainer.innerHTML = requestsData.map(r => `
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="request-checkbox" value="${r.id}" checked>
+                        <span>#${r.id} - ${escapeHtml(r.client_name)}</span>
+                        <span class="item-status ${r.status === 'Новая' ? 'new' : 'active'}">${r.status || 'Новая'}</span>
+                    </label>
+                `).join('');
+            }
+            
+            // Обработчики "выбрать всё"
+            document.getElementById('selectAllSessions').onchange = function() {
+                document.querySelectorAll('.session-checkbox').forEach(cb => cb.checked = this.checked);
+            };
+            document.getElementById('selectAllRequests').onchange = function() {
+                document.querySelectorAll('.request-checkbox').forEach(cb => cb.checked = this.checked);
+            };
+            
+            // При изменении любого чекбокса обновляем "выбрать всё"
+            document.querySelectorAll('.session-checkbox').forEach(cb => {
+                cb.onchange = function() {
+                    const all = document.querySelectorAll('.session-checkbox');
+                    const checked = document.querySelectorAll('.session-checkbox:checked');
+                    document.getElementById('selectAllSessions').checked = all.length === checked.length;
+                };
+            });
+            document.querySelectorAll('.request-checkbox').forEach(cb => {
+                cb.onchange = function() {
+                    const all = document.querySelectorAll('.request-checkbox');
+                    const checked = document.querySelectorAll('.request-checkbox:checked');
+                    document.getElementById('selectAllRequests').checked = all.length === checked.length;
+                };
+            });
+        }
+        
+        function hideReassignModal() {
+            document.getElementById('reassignModal').classList.remove('active');
+            reassignTargetId = null;
+            reassignTargetName = '';
+        }
+        
+        async function confirmReassign() {
+            if (!reassignTargetId) return;
+            
+            const targetId = document.getElementById('targetManagerSelect').value;
+            if (!targetId) {
+                showToast('Выберите менеджера для переназначения', 'error');
+                return;
+            }
+            
+            // Собираем выбранные чаты
+            const selectedSessions = [];
+            document.querySelectorAll('.session-checkbox:checked').forEach(cb => {
+                selectedSessions.push(cb.value);
+            });
+            
+            // Собираем выбранные заявки
+            const selectedRequests = [];
+            document.querySelectorAll('.request-checkbox:checked').forEach(cb => {
+                selectedRequests.push(parseInt(cb.value));
+            });
+            
+            if (selectedSessions.length === 0 && selectedRequests.length === 0) {
+                showToast('Выберите хотя бы один чат или заявку для переноса', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('confirmReassignBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Переназначение...';
+            
+            try {
+                const response = await fetch(`/api/admin/managers/${reassignTargetId}/reassign-selected`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        targetManagerId: parseInt(targetId),
+                        sessionIds: selectedSessions,
+                        requestIds: selectedRequests
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Успешно переназначено! ' + data.message, 'success');
+                    hideReassignModal();
+                    await loadManagers();
+                } else {
+                    showToast(data.error || 'Ошибка переназначения', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('Ошибка соединения с сервером', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-exchange-alt"></i> Переназначить выбранное';
+            }
+        }
+        
+        // ============================================================
+        // СОЗДАНИЕ МЕНЕДЖЕРА
+        // ============================================================
+        
+        function showCreateModal() {
+            document.getElementById('createModal').classList.add('active');
+            document.getElementById('managerUsername').value = '';
+            document.getElementById('managerPassword').value = '';
+            document.getElementById('usernameError').classList.remove('show');
+            document.getElementById('passwordError').classList.remove('show');
+            document.getElementById('managerUsername').focus();
+        }
+        
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+        }
+        
+        async function createManager(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('managerUsername').value.trim();
+            const password = document.getElementById('managerPassword').value.trim();
+            
+            let isValid = true;
+            
+            if (username.length < 3) {
+                document.getElementById('usernameError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('usernameError').classList.remove('show');
+            }
+            
+            if (password.length < 4) {
+                document.getElementById('passwordError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('passwordError').classList.remove('show');
+            }
+            
+            if (!isValid) return;
+            
+            const btn = document.getElementById('submitManagerBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создание...';
+            
+            try {
+                const response = await fetch('/api/admin/managers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Менеджер «' + username + '» успешно создан', 'success');
+                    hideCreateModal();
+                    await loadManagers();
+                } else {
+                    showToast(data.error || 'Ошибка создания', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('Ошибка соединения с сервером', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-plus"></i> Создать';
+            }
+        }
+        
+        // ============================================================
+        // УДАЛЕНИЕ
+        // ============================================================
+        
+        function confirmDelete(id, username) {
+            deleteTargetId = id;
+            document.getElementById('deleteManagerName').textContent = username;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+        
+        function hideDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteTargetId = null;
+        }
+        
+        async function deleteManager() {
+            if (!deleteTargetId) return;
+            
+            const btn = document.getElementById('confirmDeleteBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Удаление...';
+            
+            try {
+                const response = await fetch(`/api/admin/managers/${deleteTargetId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Менеджер удалён. ' + data.message, 'success');
+                    hideDeleteModal();
+                    await loadManagers();
+                } else {
+                    showToast(data.error || 'Ошибка удаления', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('Ошибка соединения с сервером', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-trash"></i> Удалить';
+            }
+        }
+        
+        // ============================================================
+        // ВЫХОД
+        // ============================================================
+        
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/login.html';
+        }
+        
+        // ============================================================
+        // ОБРАБОТЧИКИ
+        // ============================================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            
+            document.getElementById('createManagerBtn').addEventListener('click', showCreateModal);
+            document.getElementById('closeModalBtn').addEventListener('click', hideCreateModal);
+            document.getElementById('cancelModalBtn').addEventListener('click', hideCreateModal);
+            document.getElementById('createManagerForm').addEventListener('submit', createManager);
+            
+            document.getElementById('closeReassignModalBtn').addEventListener('click', hideReassignModal);
+            document.getElementById('cancelReassignBtn').addEventListener('click', hideReassignModal);
+            document.getElementById('confirmReassignBtn').addEventListener('click', confirmReassign);
+            
+            document.getElementById('closeDeleteModalBtn').addEventListener('click', hideDeleteModal);
+            document.getElementById('cancelDeleteBtn').addEventListener('click', hideDeleteModal);
+            document.getElementById('confirmDeleteBtn').addEventListener('click', deleteManager);
+            
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            document.getElementById('createModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) hideCreateModal();
+            });
+            document.getElementById('reassignModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) hideReassignModal();
+            });
+            document.getElementById('deleteModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) hideDeleteModal();
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    hideCreateModal();
+                    hideReassignModal();
+                    hideDeleteModal();
+                }
+            });
+            
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) closeMobileMenu();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,12 +1,10 @@
 function initNavigation() {
     const header = document.getElementById('header');
-    
+
     window.addEventListener('scroll', () => {
-        if (!document.getElementById('case-study').classList.contains('active')) {
-            header?.classList.toggle('header-scrolled', window.scrollY > 20);
-        }
+        header?.classList.toggle('header-scrolled', window.scrollY > 20);
     });
-    
+
     document.querySelectorAll('[data-nav]').forEach(link => {
         link.addEventListener('click', () => {
             const target = document.getElementById(link.getAttribute('data-nav'));
@@ -15,7 +13,7 @@ function initNavigation() {
             if (mobileMenu) mobileMenu.classList.remove('open');
         });
     });
-    
+
     const menuBtn = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     if (menuBtn && mobileMenu) {
@@ -23,25 +21,13 @@ function initNavigation() {
             mobileMenu.classList.toggle('open');
         });
     }
-    
+  
     document.getElementById('logo-home')?.addEventListener('click', () => {
-        if (document.getElementById('case-study').classList.contains('active')) {
-            closeProjectDetail();
-        } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
     document.getElementById('contact-btn')?.addEventListener('click', (e) => {
         e.preventDefault();
-        if (document.getElementById('case-study').classList.contains('active')) {
-            closeProjectDetail();
-            setTimeout(() => {
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        } else {
-            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-        }
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
     });
     
     document.getElementById('current-year').innerText = new Date().getFullYear();

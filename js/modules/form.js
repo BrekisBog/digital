@@ -78,10 +78,29 @@ function initContactForm() {
                 <textarea name="message" rows="4" class="contact-form-input" placeholder="Расскажите о вашем проекте..."></textarea>
                 <div class="error-slot"></div>
             </div>
+            
+            <!-- ДОБАВЛЕН ЧЕКБОКС СОГЛАСИЯ -->
+            <div class="contact-form-checkbox">
+                <input type="checkbox" id="privacyCheckbox" name="privacy" required>
+                <label for="privacyCheckbox">
+                    Я соглашаюсь с <a href="#" id="open-privacy-from-form">политикой конфиденциальности</a> и даю согласие на обработку персональных данных
+                </label>
+            </div>
+            
             <button type="submit" class="contact-form-submit">Отправить заявку</button>
         </form>`;
     
     const form = document.getElementById('contactForm');
+    
+    // Обработчик для ссылки на политику (открывает модальное окно)
+    const privacyLink = document.getElementById('open-privacy-from-form');
+    if (privacyLink) {
+        privacyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const modal = document.getElementById('privacy-modal');
+            if (modal) modal.classList.add('active');
+        });
+    }
     
     form.querySelectorAll('.contact-form-input').forEach(input => {
         input.addEventListener('input', () => {
@@ -97,6 +116,13 @@ function initContactForm() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearFormErrors(form);
+        
+        // ПРОВЕРКА ЧЕКБОКСА
+        const privacyCheckbox = document.getElementById('privacyCheckbox');
+        if (!privacyCheckbox.checked) {
+            alert('Пожалуйста, подтвердите согласие на обработку персональных данных');
+            return;
+        }
         
         if (!validateContactForm(form)) return;
 

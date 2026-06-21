@@ -88,6 +88,32 @@ function renderContactInfo() {
     }
 }
 
+// ========== НОВАЯ ФУНКЦИЯ ДЛЯ ПОРТФОЛИО ==========
+function renderPortfolio() {
+    const container = document.getElementById('portfolio-grid');
+    if (container && typeof projectsForMain !== 'undefined' && projectsForMain.length > 0) {
+        container.innerHTML = projectsForMain.map((project, index) => `
+            <div class="portfolio-item anim-item" data-project-id="${project.id}">
+                <div class="portfolio-image-wrapper">
+                    <img src="${project.image}" alt="${project.title}" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-overlay"></div>
+                </div>
+                <div class="portfolio-number">${String(index + 1).padStart(2, '0')}</div>
+                <div class="portfolio-info">
+                    <div>
+                        <div class="portfolio-category">${project.category}</div>
+                        <div class="portfolio-title">${project.title}</div>
+                    </div>
+                    <div class="portfolio-info-arrow"><i class="fas fa-arrow-right"></i></div>
+                </div>
+            </div>
+        `).join('');
+    } else if (container) {
+        container.innerHTML = '<div class="empty-state" style="text-align:center; padding:40px;">Портфолио загружается...</div>';
+    }
+}
+// ==============================================
+
 // 🔥 Инициализация карусели цен (мобильно-устойчивая)
 function initCarousel(type, totalSlides) {
     const track = document.getElementById(`carousel-track-${type}`);
@@ -112,19 +138,16 @@ function initCarousel(type, totalSlides) {
         const cards = track.querySelectorAll('.pricing-card');
         if (!cards.length) return;
         
-        // Динамически читаем gap из CSS (учитывает мобильные брейкпоинты)
         const gap = parseFloat(getComputedStyle(track).gap) || (window.innerWidth <= 768 ? 12 : 24);
         const cardWidth = cards[0].getBoundingClientRect().width;
         const offset = currentIndex * (cardWidth + gap);
         
         track.style.transform = `translateX(-${offset}px)`;
         
-        // Обновляем точки
         dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
             dot.classList.toggle('active', i === currentIndex);
         });
         
-        // Состояние кнопок
         if (prevBtn) { prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1'; prevBtn.disabled = currentIndex === 0; }
         if (nextBtn) { nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1'; nextBtn.disabled = currentIndex >= maxIndex; }
     }
@@ -152,7 +175,6 @@ function initCarousel(type, totalSlides) {
         updateCarousel();
     }
 
-    // Защита от дублирования событий на кнопках
     if (prevBtn) {
         const newPrev = prevBtn.cloneNode(true);
         prevBtn.parentNode.replaceChild(newPrev, prevBtn);
@@ -166,7 +188,6 @@ function initCarousel(type, totalSlides) {
         nextBtn.addEventListener('click', (e) => { e.stopPropagation(); if (currentIndex < maxIndex) goToSlide(currentIndex + 1); });
     }
 
-    // ResizeObserver: срабатывает ТОЛЬКО при реальном изменении контейнера
     if (observer) observer.disconnect();
     observer = new ResizeObserver(() => {
         clearTimeout(resizeTimer);
@@ -195,7 +216,6 @@ function initPricingTabs() {
             const activeContainer = document.getElementById(`carousel-${tabId}`);
             if (activeContainer) {
                 activeContainer.classList.add('active');
-                // requestAnimationFrame гарантирует, что display:block уже применён
                 requestAnimationFrame(() => {
                     if (tabId === 'dev') initCarousel('dev', devPlansData.length);
                     else initCarousel('marketing', marketingPlansData.length);
@@ -204,7 +224,6 @@ function initPricingTabs() {
         });
     });
     
-    // Инициализация активной вкладки при загрузке
     const activeTab = document.querySelector('.pricing-tab.active');
     if (activeTab) {
         const tabId = activeTab.dataset.tab;

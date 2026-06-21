@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
     <header id="header" class="site-header">
@@ -88,16 +88,44 @@
                 </div>
             </section>
 
-            <section id="process" class="process-section">
+                        <section id="process" class="process-section">
                 <div class="container">
                     <div class="section-header anim-item">
                         <span class="section-label section-label-dark">Как мы работаем</span>
                         <h2 class="section-title section-title-white">Процесс работы</h2>
                         <p class="section-description section-description-dark">Прозрачный процесс без лишних согласований — вы всегда знаете, что происходит</p>
                     </div>
-                    <div class="process-grid anim-grid" id="process-grid"></div>
+
+                    <div class="stages-wrapper">
+                        <div class="stages-buttons">
+                            <button class="stage-btn active" data-stage="1">
+                                <span class="stage-number">01</span>
+                                <span class="stage-name">Аналитика и исследования</span>
+                            </button>
+                            <button class="stage-btn" data-stage="2">
+                                <span class="stage-number">02</span>
+                                <span class="stage-name">Разработка стратегии</span>
+                            </button>
+                            <button class="stage-btn" data-stage="3">
+                                <span class="stage-number">03</span>
+                                <span class="stage-name">Реализация и интеграция</span>
+                            </button>
+                            <button class="stage-btn" data-stage="4">
+                                <span class="stage-number">04</span>
+                                <span class="stage-name">Мониторинг и оптимизация</span>
+                            </button>
+                        </div>
+
+                        <div class="stages-content" id="stagesContent">
+                            <h3 class="content-title" id="contentTitle">Аналитика и исследования</h3>
+                            <p class="content-description" id="contentDescription">
+                                На первом этапе проводится всесторонний анализ цифрового присутствия компании. Оцениваются ключевые метрики: трафик, конверсия, поведенческие факторы, позиции в поисковой выдаче. Используются инструменты веб-аналитики, такие как Google Analytics, Яндекс.Метрика, Ahrefs и SEMrush.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
+
 
             <section id="portfolio" class="portfolio-section">
                 <div class="container">
@@ -186,52 +214,6 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        <div id="case-study" class="case-study-section">
-            <div class="back-to-portfolio" id="back-to-portfolio"><i class="fas fa-arrow-left"></i> Портфолио</div>
-            
-            <div class="case-hero" id="case-hero">
-                <img id="case-hero-img" class="case-hero-image" src="photo/zaglushka.jpg" alt="">
-                <div class="case-hero-overlay"></div>
-                <div class="case-hero-content">
-                    <span class="case-hero-category" id="case-category">Лендинг</span>
-                    <h1 class="case-hero-title" id="case-title">Юридическая компания «Правозащита»</h1>
-                    <div class="case-hero-meta">
-                        <div><span>Год:</span> <span id="case-year">2024</span></div>
-                        <div><span>Срок:</span> <span id="case-duration">2 недели</span></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="case-main">
-                <div class="case-layout">
-                    <div class="case-left">
-                        <p class="case-description-text" id="case-description"></p>
-                        <div class="case-info-cards" id="case-cards"></div>
-                        <div class="case-screenshots-section">
-                            <h3 class="case-screenshots-title">Скриншоты проекта</h3>
-                            <div class="case-screenshots-grid" id="case-screenshots"></div>
-                        </div>
-                    </div>
-                    <div class="case-sidebar">
-                        <div class="case-sidebar-card">
-                            <h3 class="case-tech-title">Технологии и услуги</h3>
-                            <div class="case-tags" id="case-tags"></div>
-                        </div>
-                        <div class="case-cta-card">
-                            <h3 class="case-cta-title">Нужен похожий проект?</h3>
-                            <p class="case-cta-text">Расскажите о своей задаче — обсудим и сделаем предложение.</p>
-                            <a href="#contact" class="case-cta-button" id="case-cta-link">Обсудить проект</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="case-navigation">
-                <div class="case-nav-inner" id="case-navigation"></div>
-            </div>
-        </div>
     </main>
 
     <footer class="footer">
@@ -275,7 +257,6 @@
         </div>
     </div>
 
-    <!-- ========== ЧАТ-ВИДЖЕТ (ТОЛЬКО РАЗМЕТКА) ========== -->
     <div class="chat-widget-button" id="chatWidgetBtn">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="currentColor" stroke="none"/>
@@ -325,6 +306,7 @@
     <script src="js/data/reviews.js"></script>
     <script src="js/data/contacts.js"></script>
     <script src="js/data/projects.js"></script>
+    <script src="js/modules/how.js"></script>
     
     <script src="js/utils/helpers.js"></script>
     
